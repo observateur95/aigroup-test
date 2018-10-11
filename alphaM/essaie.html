@@ -5,40 +5,145 @@
 	<script src="vue.js"></script>
 </head>
 <body>
+<br/>App 1<br/>
+<div id="app">
+  {{ message }}
+</div>
 
-	<div id="element">
+<br/>App 2<br/>
+<div id="app-2">
+  <span v-bind:title="message">
+    Hover your mouse over me for a few seconds
+    to see my dynamically bound title!
+  </span>
+</div>
 
-		<p v-text="texte"></p>
-		
-	</div>
+<br/>App 3<br/>
+<div id="app-3">
+  <span v-if="seen">Now you see me</span>
+</div>
+
+<br/>App 4<br/>
+<div id="app-4">
+  <ol>
+    <li v-for="todo in todos">
+      {{ todo.text }}
+    </li>
+  </ol>
+</div>
+
+<br/>App 5<br/>
+<div id="app-5">
+  <p>{{ message }}</p>
+  <button v-on:click="reverseMessage">Reverse Message</button>
+</div>
+
+<br/>App 6<br/>
+<div id="app-6">
+  <p>{{ message }}</p>
+  <input v-model="message">
+  <todo-item-simple></todo-item-simple>
+</div>
 
 
-	<div id="voyons">
-		{{ texte }}
-	</div>
-
+<h1>Component</h1>
+<div id="app-7">
+  <ol>
+    <!--
+      Now we provide each todo-item with the todo object
+      it's representing, so that its content can be dynamic.
+      We also need to provide each component with a "key",
+      which will be explained later.
+    -->
+    <todo-item
+      v-for="item in groceryList"
+      v-bind:todo="item"
+      v-bind:key="item.id">
+    </todo-item>
+  </ol>
+</div>
 
 </body>
 <script type="text/javascript">
 
-	let vm= new Vue({
-		el:'#element',
-		data: {
-			texte: "Mon texte"
+// Define a new component called todo-item
+Vue.component('todo-item-simple', {
+  template: '<li>This is a simple todo</li>'
+})
 
-		}
-	});
+Vue.component('todo-item', {
+  // The todo-item component now accepts a
+  // "prop", which is like a custom attribute.
+  // This prop is called todo.
+  props: ['todo'],
+  template: '<li>{{ todo.text }}</li>'
+})
 
-	setTimeout(function(){ vm.texte = 'Mon autre texte'; }, 3000);
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+
+var app2 = new Vue({
+  el: '#app-2',
+  data: {
+    message: 'You loaded this page on ' + new Date().toLocaleString()
+  }
+})
+
+var app3 = new Vue({
+  el: '#app-3',
+  data: {
+    seen: true
+  }
+})
+
+var app4 = new Vue({
+  el: '#app-4',
+  data: {
+    todos: [
+      { text: 'Learn JavaScript' },
+      { text: 'Learn Vue' },
+      { text: 'Build something awesome' }
+    ]
+  }
+})
+
+var app5 = new Vue({
+  el: '#app-5',
+  data: {
+    message: 'Hello Vue.js!'
+  },
+  methods: {
+    reverseMessage: function () {
+      this.message = this.message.split('').reverse().join('')
+    }
+  }
+})
+
+var app6 = new Vue({
+  el: '#app-6',
+  data: {
+    message: 'Hello Vue!'
+  }
+})
+
+var app7 = new Vue({
+  el: '#app-7',
+  data: {
+    groceryList: [
+      { id: 0, text: 'Vegetables' },
+      { id: 1, text: 'Cheese' },
+      { id: 2, text: 'Whatever else humans are supposed to eat' }
+    ]
+  }
+})	
 
 
-	var appliquer = new Vue({
-	  el: '#voyons',
-	  data: {
-	    texte: 'Hello Vue!'
-	  }
-	})
-	
+
 </script>
 
 </html>
