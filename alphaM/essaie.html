@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="vue.js"></script>
+</head>
+<body>
+
+	<div id="element">
+
+		<p v-text="texte"></p>
+		
+	</div>
+
+
+	<div id="voyons">
+		{{ texte }}
+	</div>
+
+
+</body>
+<script type="text/javascript">
+
+	let vm= new Vue({
+		el:'#element',
+		data: {
+			texte: "Mon texte"
+
+		}
+	});
+
+	setTimeout(function(){ vm.texte = 'Mon autre texte'; }, 3000);
+
+
+	var appliquer = new Vue({
+	  el: '#voyons',
+	  data: {
+	    texte: 'Hello Vue!'
+	  }
+	})
+	
+</script>
+
+</html>
