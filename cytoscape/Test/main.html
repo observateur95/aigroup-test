@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="cytoscape.js"></script>
+    <script src="vue.js"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="flex-container">
+    <div id="cy"></div>
+
+    <div id="datas">
+        <div>
+            <div class="bold-text">Comment fonctionne l'appli :</div>
+            <br>
+            <ul>
+                <li>Entrez le nom du noeud que vous voulez ajouter</li>
+                <li>Cliquez sur la carte pour ajouter le noeud</li>
+                <li>Selectionner 2 noeuds</li>
+                <li>Cliquer sur creer arrete pour créer une arrete</li>
+                <li>Deplacer les noeuds comme vous voulez sur la carte</li>
+            </ul>
+
+        </div>
+        <div class="flex-container-column centered">
+            <div class="bold-text">Noeuds selectionnés :</div>
+            <span> Noeud ancien : {{ selectedNodes[0] }} </span>
+            <div class="bold-text">Noeud actuel :{{ selectedNodes[1] }}</div>
+            <br>
+            <div class="bold-text">Nom nouveau noeud :</div>
+            <input v-model="newNodeName" placeholder="Nom du noeud">
+            <br>
+            <button v-on:click="createEdge">Creer arrete</button>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+
+    let BASIC_NODE_STYLE = {
+        'background-color': '#abc',
+        'label': 'data(id)'
+    };
+    let SELECTED_NODE_STYLE = {
+        'border-color': '#ff5555',
+        'border-width': '3px',
+
+    };
+    let PREVIOUS_SELECTED_NODE_STYLE = {
+        'border-color': '#ffa9a9',
+        'border-width': '2px',
+    };
+    let cy = cytoscape({
+        container: document.getElementById('cy'), // container to render in
+
+        elements: [ // list of graph elements to start with
+            { // node a
+                data: {id: 'a'}
+            },
+            { // node b
+                data: {id: 'b'}
+            },
+            { // edge ab
+                data: {id: 'ab', source: 'a', target: 'b'}
+            }
+        ],
+
+        style: [ // the stylesheet for the graph
+            {
+                selector: 'node',
+                style: {
+                    'background-color': '#abc',
+                    'label': 'data(id)'
+                }
+            },
+
+            {
+                selector: 'edge',
+                style: {
+                    'width': 3,
+                    'line-color': '#ccc',
+                    'target-arrow-color': '#aaa',
+                    'target-arrow-shape': 'square'
+                }
+            },
+
+            {
+                selector: '.selectedNode',
+                style: SELECTED_NODE_STYLE,
+            },
+
+            {
+                selector: '.previouslySelectedNode',
+                style: PREVIOUS_SELECTED_NODE_STYLE,
+            },
+
+        ],
+
+        layout: {
+            name: 'grid',
+            rows: 1
+        }
+    });
+
+
+    let nodeSelected = [];
+
+    cy.add({
+        group: "nodes",
+        data: {weight: 200},
+        position: {x: 200, y: 200}
+    });
+
+    let eles = cy.add([
+        {group: "nodes", data: {id: "n0"}, position: {x: 100, y: 100}},
+        {group: "nodes", data: {id: "n1"}, position: {x: 200, y: 200}},
+        {group: "edges", data: {id: "e0", source: "n0", target: "n1"}}
+    ]);
+
+    console.log(eles);
+
+    let collection = cy.collection();
+
+    let refreshSelectedData = () => {
+        app3.selectedNodes = nodeSelected.map(x => x.data());
+    };
+
+    let selectNewNode = newNode => {
+        nodeSelected.push(newNode);
+        newNode.addClass('selectedNode');
+        if (nodeSelected.length > 2) {
+            nodeSelected.shift().removeClass('previouslySelectedNode');
+        }
+        if (nodeSelected.length === 2) {
+            nodeSelected[0].removeClass('selectedNode');
+            nodeSelected[0].addClass('previouslySelectedNode');
+        }
+        refreshSelectedData()
+    };
+
+
+    let functionClickOnNode = elementClicked => {
+        collection = collection.add(elementClicked);
+        selectNewNode(elementClicked)
+        console.log('voici', nodeSelected);
+        console.log('this', elementClicked.data(), elementClicked);
+        console.log(app3.selectedNodes);
+    };
+
+    let createNewNode = (pos, name) => {
+        let newNode = cy.add({
+            group: "nodes",
+            position: pos,
+            data: {id: name},
+        });
+
+        newNode.on("click", function () {
+            functionClickOnNode(this);
+        });
+        selectNewNode(newNode);
+    };
+
+    cy.nodes().on("click", function () {
+        functionClickOnNode(this);
+    });
+
+
+    cy.on('tap', function (event) {
+        // target holds a reference to the originator
+        // of the event (core or element)
+        let evtTarget = event.target;
+
+        console.log(event.position);
+
+        if (evtTarget === cy) {
+            console.log('tap on background');
+            if (app3.newNodeName.length < 1) {
+                alert('entrer un nom de noeud valide');
+                return
+            } else if (testIfNodesHaveSameName(app3.newNodeName)) {
+                alert('deux noeuds ne peuvent pas avoir le meme nom dsl');
+            }
+            createNewNode(event.position, app3.newNodeName);
+
+        } else {
+            console.log('tap on some element');
+        }
+    });
+
+    console.log('nodes', cy.nodes());
+    let testIfNodesHaveSameName = (nameToTest) => {
+        return cy.nodes().map(node => node.id()).includes(nameToTest)
+    };
+
+
+    let app3 = new Vue({
+        el: '#datas',
+        data: {
+            selectedNodes: [],
+            newNodeName: '',
+        },
+        methods: {
+            createEdge: function () {
+                let currentNodeId = nodeSelected[1].id();
+                let previousNodeId = nodeSelected[0].id();
+
+                let newEdge = cy.add({
+                    group: "edges",
+                    data: {id: previousNodeId + '-' + currentNodeId, source: previousNodeId, target: currentNodeId}
+                });
+            }
+        }
+    });
+</script>
+<script src="vueComponents.js"></script>
+</html>

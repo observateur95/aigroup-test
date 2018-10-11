@@ -1,0 +1,26 @@
+#cy {
+    width: 1300px;
+    height:600px;
+    border: 1px solid black;
+}
+
+.flex-container {
+    display: flex;
+
+}
+.flex-container-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-container-column.centered {
+    align-items: center;
+}
+
+.bold-text {
+    font-weight: 800;
+}
+
+.selected-node {
+    border: 3px #ff5555;
+}
