@@ -43,7 +43,7 @@ window.onload = function() {
             quiz: quiz,
 //            userResponses: Array(quiz.questions.length).fill(false)
         }, // On attache le questionnaire à data
-        method: {
+        methods: {
             verif: function(event){
                 alert('ras');
             }
