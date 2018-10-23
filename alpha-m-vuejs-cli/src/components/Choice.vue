@@ -1,5 +1,5 @@
 <template>
-    <div class="choice-div" v-on:click="$emit('choice-click',index)">{{ txtMessage }}</div>
+    <div class="choice-div" v-on:click="$emit('choice-click',index)" :class='color'>{{ txtMessage }}</div>
 </template>
 
 <script>
@@ -8,7 +8,8 @@
         props: {
             txtMessage: String,
             index: Number,
-        },
+            color: String,
+        }
     };
 </script>
 

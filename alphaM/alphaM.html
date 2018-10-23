@@ -30,26 +30,8 @@
 		
 		<!-- Essaie de QCM no done -->
 		<h2>Essaie de QCM (no done)</h2>
-		<div id="app-8">
-            <!-- Titre du quiz -->
-            <h1>{{ quiz.title }}</h1>
-            <!-- Questions: on affiche une div pour chaque question -->
-            <div v-for="question in quiz.questions">
-                <h2>{{ question.text }}</h2>
-                <!-- Responses: on affiche une balise li pour chaque réponse possible -->
-                <ol>
-                    <li v-for="response in question.responses">
-                        <label>
-                            <input type="radio" name="question.name"
-                                   v-bind:value="response.correct" 
-                                   v-on:change="verif"
-                                   > 
-                            <span>{{response.text}}</span>
-                            <!--<span v-if="response.correct">,{{response.message}}</span>-->
-                        </label>
-                    </li>
-                </ol>
-            </div>
+		<div id="app-8" >
+            <quiz :quiz='quiz' :click-on-choice='verif'></quiz>
         </div>
 
     </div>

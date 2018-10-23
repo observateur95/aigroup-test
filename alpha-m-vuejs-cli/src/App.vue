@@ -1,15 +1,17 @@
 <template>
     <div id="app">
         <div id="nav">
-            <router-link to="/">Home</router-link>
+            <router-link to="/">AlphaM</router-link>
             |
             <router-link to="/about">About</router-link>
             |
             <router-link to="/QCM">QCM</router-link>
             |
+            <router-link to="/home">Intial</router-link>
+            |
             <router-link to="/library">Bibliotheque</router-link>
             |
-            <router-link to="/contact">Contacts</router-link>
+            <router-link to="/contact">Contact</router-link>
         </div>
         <router-view/>
     </div>
