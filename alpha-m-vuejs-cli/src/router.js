@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import QCMView from './views/QCMView.vue'
 import Welcome from './views/Welcome.vue'
+import Contact from './views/Contact.vue'
 
 Vue.use(Router);
 
@@ -32,6 +33,11 @@ export default new Router({
             path: '/QCM',
             name: 'qcm',
             component: QCMView,
-        }
+        },
+        {
+            path: '/contact',
+            name: 'contact',
+            component: Contact,
+        },
     ],
 })

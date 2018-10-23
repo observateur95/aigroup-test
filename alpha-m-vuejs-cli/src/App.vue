@@ -11,7 +11,7 @@
             |
             <router-link to="/library">Bibliotheque</router-link>
             |
-            <router-link to="/contact">Contacts</router-link>
+            <router-link to="/contact">Contact</router-link>
         </div>
         <router-view/>
     </div>
