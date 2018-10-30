@@ -9,7 +9,7 @@
             txtMessage: String,
             index: Number,
             color: String,
-        },
+        }
     };
 </script>
 

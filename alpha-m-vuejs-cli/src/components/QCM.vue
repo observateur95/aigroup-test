@@ -32,7 +32,9 @@
             return {
                 checkedAnswer: new Set(),
             };
-        }, methods: {
+        },
+
+        methods: {
             handleChoiceClick: function (index) {
                 let checkedAnswerArray = new Set(this.checkedAnswer);
                 checkedAnswerArray.has(index) ?
@@ -78,6 +80,6 @@
     }
 
     button {
-        width:200px;
+        width: 200px;
     }
 </style>
