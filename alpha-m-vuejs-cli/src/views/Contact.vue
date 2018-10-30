@@ -30,10 +30,39 @@
             </p>
             <div style='flex: 1; display: flex; flex-direction: column; '>
                 <p>Message</p>
-                <input type='textarea' style='width:800px; flex: 1; min-height: 300px'/>
+                <textarea style='width:800px; flex: 1; min-height: 200px'/>
                 <button @click='validationClick'>Valider</button>
             </div>
         </div>
+        <v-container grid-list-md text-xs-center>
+            <v-layout row wrap>
+                <v-flex xs12 lg6>
+                    <v-form ref="form" v-model="valid">
+                        <v-text-field lg3
+                                v-model="name"
+                                :rules="nameRules"
+                                :counter="10"
+                                label="Name"
+                                required
+                        ></v-text-field>
+                        <v-text-field
+                                v-model="email"
+                                :rules="emailRules"
+                                label="E-mail"
+                                required
+                        ></v-text-field>
+
+
+                        <v-btn @click="submit">submit</v-btn>
+                        <v-btn @click="clear">clear</v-btn>
+                    </v-form>
+                </v-flex>
+                <v-flex xs12>
+                    <div>Text</div>
+                </v-flex>
+                <div>Test</div>
+            </v-layout>
+        </v-container>
         <!--<h2> Paiement</h2>-->
         <!--Montant de votre première échéance: 1000FCFA-->
         <!--<div>-->
@@ -50,16 +79,45 @@
 
 <script>
     // @ is an alias to /src
+    import axios from 'axios';
 
     export default {
         name: 'home',
+        data: () => ({
+            valid: false,
+            name: '',
+            nameRules: [
+                v => !!v || 'Name is required amigo',
+                v => v.length <= 10 || 'Name must be less than 10 characters',
+            ],
+            email: '',
+            emailRules: [
+                v => !!v || 'E-mail is required',
+                v => /.+@.+/.test(v) || 'E-mail must be valid',
+            ],
+        }),
         methods: {
             validationClick: function () {
                 alert('validation');
             },
+            submit() {
+                if (this.$refs.form.validate()) {
+                    // Native form submission is not yet supported
+                    axios.post('/api/submit', {
+                        name: this.name,
+                        email: this.email,
+                        select: this.select,
+                        checkbox: this.checkbox,
+                    });
+                }
+            },
+            clear() {
+                this.$refs.form.reset();
+            },
         },
     }
     ;
+
 </script>
 
 

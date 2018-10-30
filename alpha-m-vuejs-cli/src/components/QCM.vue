@@ -1,16 +1,12 @@
 <template>
     <div class='flex-container-column'>
-        <h1>{{ question }}</h1>
+        <h1>{{ (qcm.index + 1).toString() +  '. ' + qcm.question }}</h1>
         <div>
-            <Choice v-for="(choice , index) in choices"
-                    :index="index" :txtMessage="choice.title" :class="setChoiceSelectedClass(index)"
-                    v-on:choice-click='handleChoiceClick'
-                    color='good_answer'></Choice>
-        </div>
-        <div>
-            <button @click='validateChoices'>Valider</button>
-            <button>Retour</button>
-            <button>Aller au cours</button>
+            <Choice v-for="(choice, index) in qcm.choices"
+                    :index="index" :txtMessage="choice.value"
+                    :class="setChoiceSelectedClass(index)"
+                    :selected = "setChoiceSelectedClass(index).selected"
+                    @click.native='handleChoiceClick(index)'></Choice>
         </div>
     </div>
 </template>
@@ -24,26 +20,24 @@
             Choice,
         },
         props: {
-            question: String,
-            choices: Array,
+            qcm: Object,
+            checkedAnswer: Set,
         },
-
         data: function () {
-            return {
-                checkedAnswer: new Set(),
-            };
+            return {};
         },
-
         methods: {
-            handleChoiceClick: function (index) {
-                let checkedAnswerArray = new Set(this.checkedAnswer);
-                checkedAnswerArray.has(index) ?
-                    checkedAnswerArray.delete(index) :
-                    checkedAnswerArray.add(index);
-                this.checkedAnswer = checkedAnswerArray;
+            handleChoiceClick: function (index=0) {
+                this.$emit('choice-click' ,this.qcm, index);
             },
             setChoiceSelectedClass: function (index) {
-                return {selected: this.checkedAnswer.has(index)};
+                let isChoiceSelected = this.checkedAnswer ? this.checkedAnswer.has(index) : false;
+                let isChoiceAGoodAnswer = this.qcm.choices ? this.qcm.choices[index].correct === isChoiceSelected : false ;
+                return {
+                    selected: isChoiceSelected,
+                    'good-answer': this.qcm.showAnswers && isChoiceAGoodAnswer,
+                    'bad-answer': this.qcm.showAnswers && !isChoiceAGoodAnswer,
+                };
             },
             validateChoices: function () {
                 console.log(this.checkedAnswer);

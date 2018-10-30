@@ -1,0 +1,11 @@
+.flex-container {
+    display: flex;
+}
+
+.flex-1 {
+    flex:1
+}
+
+html, body, #app {
+    height:100%;
+}
