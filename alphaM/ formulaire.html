@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inscription</title>
+    <link rel="stylesheet" href="./formulaire.css" type="text/css"/>
+    <script src="./vuejs.js"></script>
+</head>
+
+<body>
+ 
+  <form>
+	 <h2> 
+		 Coordonnées
+	 </h2>
+	   <div id="form">
+		  <p>
+			  <label for="firstname"> Prénom*</label>:<input type="text" name="firstname" size="60" required ></input>
+		  </p>  
+		  
+		   <p><label for="lastname"> Nom*</label>:<input type="text" name="lastname" size="60" required></input>
+		   </p>
+	
+		
+			 <p id="adress"> 
+				 <label for="adress"> Adresse</label>:<input type="text" name="adress" size="60"></input>
+			 </p>
+			  <p id="pbox">
+				  <label for="pbox"> Code postal </label>:<input type="text" name="pbox" size="60"></input>
+			 </p>
+			 <p>
+				 <label for="town"> Ville*</label>:<input type="text" name="town" size="60" required></input>
+			 </p>
+			  <p id="country">
+				  <label for=" country"> Pays*</label>:<input type="text" name="country" size="60" required></input>
+			      
+			 </p>
+			 <p>
+				 <label for="university"> Université*</label>:<input type="text" name="university" size="60" required></input>
+			 </p>
+			  <p id="phone">
+				  <label for="phone"> Téléphone*</label>:<input type="tel" name="tphone" required></input>
+			      
+			 </p>
+			 <p>
+				 <label for="level"> Niveau</label>:
+				 <select name="level" id="level">
+				   <option value="Licence 1"  >Licence 1</option>
+				   <option value="Licence 2"  >Licence 2</option>
+				   <option value="Licence 3 "  >Licence 3</option>
+				 </select>
+			 </p>
+			  <p>
+				 <label for="email">  email*</label>:<input type="email"placeholder="alpham@gmail.com"  name="email" size="60" required></input>
+			 </p>
+			 <h2> Paiement</h2>
+			 Montant de votre première échéance: 1000FCFA
+			 <div>
+			     Choix du paiement:
+				 <p>
+				 <input type="radio" name="payment" value="carte" id="carte"/><label for="carte">Carte bancaire</label>
+				  <input type="radio" name="payment" value="om" id="om"/><label for="om">Orange money</label>
+				   <input type="radio" name="payment" value="momo" id="momo"/><label for="momo">MTN mobile money</label>
+				  <input type="radio" name="payment" value="eu" id="eu"/><label for="eu">Express Union mobile money</label>
+				 </p>
+			 </div>
+	 </p>
+	 <p>
+		 <input type="submit" value="envoyer"/>
+	 </p>
+	 	</div>
+  </form>
+  
+  
+  <style>
+	  
+  </style>
+   
+ <script>
+	 
+  
+ </script>
+ 
+
+</body>
+</html>

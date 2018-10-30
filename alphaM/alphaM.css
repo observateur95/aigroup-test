@@ -7,13 +7,18 @@ body {
     height: 200px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    
     align-items: center;
     color: #fff;
     margin:0px;
 }
 
+.navbar{
+    
+}
+
 .titleDiv h1 {
+ text-align: left;
 
 }
 
@@ -23,4 +28,13 @@ body {
 
 .section {
     height: 600px;
+}
+.navleft{
+     width: 200px;
+      height:600px;
+     align-items: left;
+     background-color: rgb(255,215,199);
+}
+.navleft li {
+    padding:5px 10px;
 }
