@@ -1,7 +1,10 @@
 <template>
     <div class="choice-div">
         <!--<input type='checkbox' :checked='selected'></input>-->
-        <div>{{ txtMessage }}</div>
+        <v-icon v-if='isCorrection' :class='this.selected === this.choice.correct ? "good_answer" : "bad_answer"'>
+            {{choice.correct === selected ? 'check' : 'close'}}
+        </v-icon>
+        <div>{{ choice.value }}</div>
     </div>
     <!--v-on:click="$emit('choice-click',index)" -->
 
@@ -11,9 +14,10 @@
     export default {
         name: 'Choice',
         props: {
-            txtMessage: String,
+            choice: Object,
             index: Number,
             selected: Boolean,
+            isCorrection: Boolean,
         },
     };
 </script>
@@ -29,20 +33,21 @@
         /*color: #004444;*/
     }
 
-    input[type='checkbox']  {
+    input[type='checkbox'] {
         width: 20px;
         height: 20px;
     }
 
     .selected {
-        color: #42b983;
+        color: #f5b043;
+        font-weight: 800;
     }
 
-    .good-answer {
-        color: green;
-    }
-
-    .bad-answer {
+    .bad_answer, .v-icon.bad_answer {
         color: red;
+    }
+
+    .good_answer, .v-icon.good_answer {
+        color: green;
     }
 </style>

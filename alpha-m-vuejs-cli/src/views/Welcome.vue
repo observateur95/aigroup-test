@@ -29,7 +29,6 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-bottom: 10%;
     }
 
     .text-logo {

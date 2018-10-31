@@ -3,16 +3,16 @@
         <h1>{{ quiz.title }}</h1>
         <QCM v-for='(qcm, index) in quiz.qcms'
              @choice-click='handleChoiceClick'
+             @show-course-click='handleShowCourseClick'
              :checkedAnswer='checkedAnswer[qcm.id]'
              :qcm='qcmToSend(qcm,index,quizValidated)'></QCM>
 
         <div>
             <button @click='validateChoices'>Valider</button>
-            <button>Retour</button>
-            <button>Aller au cours</button>
+            <button @click='resetQuiz'>Recommencer</button>
         </div>
         <div v-if='quizValidated'>
-            Vous avez un certain nombre de bonnes réponses
+            {{getGoodAnswersNumber()}}
         </div>
     </div>
 </template>
@@ -40,8 +40,8 @@
         },
 
         methods: {
-            qcmToSend: function(qcm,index,quizValidated) {
-                return Object.assign({},qcm,{index:index, showAnswers:quizValidated})
+            qcmToSend: function (qcm, index, quizValidated) {
+                return Object.assign({}, qcm, {index: index, showAnswers: quizValidated});
             },
             handleChoiceClick: function (qcm, index) {
                 if (this.quizValidated) return;
@@ -55,11 +55,11 @@
                     qcmClickedCheckedAnswerArray.delete(index) :
                     qcmClickedCheckedAnswerArray.add(index);
                 this.checkedAnswer = allCheckedAnswer;
-                console.log(qcm,index, this.checkedAnswer);
+                console.log(qcm, index, this.checkedAnswer);
 
             },
-            setChoiceSelectedClass: function (index) {
-                return {selected: this.checkedAnswer.has(index)};
+            handleShowCourseClick: function (qcm) {
+                this.$emit('show-course', qcm.course_section_id);
             },
             validateChoices: function () {
                 this.quizValidated = true;
@@ -68,8 +68,35 @@
                     return JSON.stringify(this.choices[x]);
                 }));
             },
+            resetQuiz: function () {
+                this.quizValidated = false;
+                this.checkedAnswer = {};
+            },
             showClicked: function (qcm, index) {
                 console.log(qcm, index, 'yeah');
+            },
+            //answerSleeceted is a set
+            getQCMScore: function (qcm, answersSelected) {
+                console.log('loup', qcm, qcm.choices.length, answersSelected);
+                for (let i = 0; i < qcm.choices.length; i++) {
+                    let answerSelected = answersSelected ? answersSelected.has(i) : false;
+                    console.log('bin', qcm.id.toString(), i, qcm.choices[i].correct, answerSelected, qcm.choices[i].correct === answerSelected);
+                    if (qcm.choices[i].correct !== answerSelected) {
+                        return 0;
+                    }
+                }
+                return 1;
+            },
+            getGoodAnswersNumber: function () {
+                if (!this.quizValidated) {
+                    return null;
+                }
+                let score = 0;
+                for (const qcm0 of  this.quiz.qcms) {
+                    score += this.getQCMScore(qcm0, this.checkedAnswer[qcm0.id]);
+                }
+                this.goodAnswersNumber = score;
+                return score > 1 ? `Vous avez ${score} bonnes réponses` : `Vous avez ${score} bonne réponse`;
             },
         },
 

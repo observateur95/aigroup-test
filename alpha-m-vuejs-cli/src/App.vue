@@ -54,14 +54,14 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list-group>
-                    <v-list-tile v-else :key="item.text" @click="">
+                    <v-list-tile v-else :key="item.text" @click.native="navigateTo(item.redirectTo)">
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
                             <v-list-tile-title>
                                 <!--{{ item.text }}-->
-                                <router-link :to="item.redirectTo">{{ item.text }}</router-link>
+                                <router-link :to="item.redirectTo" :exact='item.exact'>{{ item.text }}</router-link>
                             </v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
@@ -70,20 +70,21 @@
         </v-navigation-drawer>
         <v-toolbar
                 :clipped-left="$vuetify.breakpoint.lgAndUp"
-                color="grey"
                 dark
                 app
                 fixed
         >
-            <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+            <v-toolbar-title class="ml-0 pr-3">
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <span style='flex: 1;' id='text-logo'>
-                    <router-link to="/">AlphaM</router-link>
-                </span>
+
+
             </v-toolbar-title>
+            <span style='flex: 1;' id='text-logo' class='hidden-sm-and-down'>
+            <router-link to="/">AlphaM</router-link>
+            </span>
         </v-toolbar>
         <v-content>
-            <v-container fluid fill-height>
+            <v-container fluid fill-height class='background-color-grey'>
                 <v-layout justify-center align-center>
                     <v-flex text-xs-center>
                         <router-view/>
@@ -91,56 +92,73 @@
                 </v-layout>
             </v-container>
         </v-content>
-        <v-footer app></v-footer>
+        <v-footer app>
+            <v-layout justify-center align-center>
+                <span>Conditions d'utilisation </span>
+                <span> &nbsp; FAQ</span>
+                <span> &nbsp; &copy; 2018</span>
+            </v-layout>
+        </v-footer>
     </v-app>
 </template>
 
 <script>
+
+
+    import router from './router';
+
     export default {
         data: () => ({
             dialog: false,
             drawer: null,
             //        Pour les icons, aller sur https://material.io/tools/icons/
             items: [
-                {icon: 'apps', text: 'Cours', redirectTo: 'library'},
-                {icon: 'poll', text: 'QCM', redirectTo: 'qcm'},
-                {icon: 'contact_support', text: 'Contact', redirectTo: 'contact'},
-//                {icon: 'contacts', text: 'Cours', redirectTo: 'Courses'},
-//                {icon: 'history', text: 'Frequently contacted'},
-//                {icon: 'content_copy', text: 'Duplicates'},
-//                {
-//                    icon: 'keyboard_arrow_up',
-//                    'icon-alt': 'keyboard_arrow_down',
-//                    text: 'Labels',
-//                    model: true,
-//                    children: [
-//                        {icon: 'add', text: 'Create label'},
-//                    ],
-//                },
-//                {
-//                    icon: 'keyboard_arrow_up',
-//                    'icon-alt': 'keyboard_arrow_down',
-//                    text: 'More',
-//                    model: false,
-//                    children: [
-//                        {text: 'Import'},
-//                        {text: 'Export'},
-//                        {text: 'Print'},
-//                        {text: 'Undo changes'},
-//                        {text: 'Other contacts'},
-//                    ],
-//                },
-//                {icon: 'settings', text: 'Settings'},
-//                {icon: 'chat_bubble', text: 'Send feedback'},
-//                {icon: 'help', text: 'Help'},
-//                {icon: 'phonelink', text: 'App downloads'},
-//                {icon: 'keyboard', text: 'Go to the old version'},
-//                {icon: 'settings', text: 'Settings', heading: 'nananan'},
+                {icon: 'home', text: 'AlphaM', redirectTo: '/', exact:true},
+                {icon: 'apps', text: 'Cours', redirectTo: '/library'},
+                {icon: 'poll', text: 'QCM', redirectTo: '/qcm'},
+                {icon: 'contact_support', text: 'Contact', redirectTo: '/contact'},
+                //                {icon: 'contacts', text: 'Cours', redirectTo: 'Courses'},
+                //                {icon: 'history', text: 'Frequently contacted'},
+                //                {icon: 'content_copy', text: 'Duplicates'},
+                //                {
+                //                    icon: 'keyboard_arrow_up',
+                //                    'icon-alt': 'keyboard_arrow_down',
+                //                    text: 'Labels',
+                //                    model: true,
+                //                    children: [
+                //                        {icon: 'add', text: 'Create label'},
+                //                    ],
+                //                },
+                //                {
+                //                    icon: 'keyboard_arrow_up',
+                //                    'icon-alt': 'keyboard_arrow_down',
+                //                    text: 'More',
+                //                    model: false,
+                //                    children: [
+                //                        {text: 'Import'},
+                //                        {text: 'Export'},
+                //                        {text: 'Print'},
+                //                        {text: 'Undo changes'},
+                //                        {text: 'Other contacts'},
+                //                    ],
+                //                },
+                //                {icon: 'settings', text: 'Settings'},
+                //                {icon: 'chat_bubble', text: 'Send feedback'},
+                //                {icon: 'help', text: 'Help'},
+                //                {icon: 'phonelink', text: 'App downloads'},
+                //                {icon: 'keyboard', text: 'Go to the old version'},
+                //                {icon: 'settings', text: 'Settings', heading: 'nananan'},
             ],
         }),
         props: {
             source: String,
         },
+        methods : {
+            navigateTo: function(url) {
+                router.push(url);
+                console.log('click');
+            }
+        }
     };
 </script>
 
@@ -167,8 +185,17 @@
         text-decoration: none;
     }
 
-    #nav a.router-link-exact-active {
+    #nav a.router-link-active {
         color: #42b983;
+    }
+
+    .v-icon {
+        font-size: 30px;
+
+    }
+
+    #nav .v-list__tile__content {
+        font-size: 25px;
     }
 
     #text-logo a {
@@ -177,6 +204,16 @@
         font-weight: 900;
         text-decoration: none;
         font-family: 'Zapfino';
+        position: relative;
+        top: 15px;
+    }
+
+    .v-content__wrap {
+        background-color: rgb(250, 57, 117)
+    }
+
+    .v-list {
+        width:100%;
     }
 </style>
 

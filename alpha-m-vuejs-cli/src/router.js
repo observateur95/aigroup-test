@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import QCMView from './views/QCMView.vue'
 import Welcome from './views/Welcome.vue'
 import Contact from './views/Contact.vue'
+import Library from './views/Library.vue'
 
 Vue.use(Router);
 
@@ -33,11 +34,23 @@ export default new Router({
             path: '/QCM',
             name: 'qcm',
             component: QCMView,
+            children : [
+                {
+                    path: ':id',
+                    component: QCMView,
+                },
+            ]
         },
+
         {
             path: '/contact',
             name: 'contact',
             component: Contact,
+        },
+        {
+            path: '/library',
+            name: 'library',
+            component: Library,
         },
     ],
 })
